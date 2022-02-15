@@ -102,20 +102,116 @@ function getStackTrace(event) {
     return trace;
 }
 
+function formatMessage(message, recursive) {
+    let container = document.createElement("div")
+
+
+    if (message === null || message === undefined)
+        container.innerHTML = message
+    else {
+        switch (typeof message) {
+            case "object":
+                container.appendChild(messageObject(message, recursive))
+                break;
+            case "string":
+                container.appendChild(messageString(message))
+                break;
+            case "number":
+                container.appendChild(messageNum(message))
+                break;
+            case "boolean":
+                container.appendChild(messageBool(message))
+                break;
+            default:
+                break
+        }
+    }
+
+    return container
+}
+
+function messageString(message) {
+    let p = document.createElement("p")
+
+    p.className = "message-string"
+    p.innerText = message
+
+    return p
+}
+
+function messageNum(num) {
+    let p = document.createElement("p")
+
+    p.className = "message-number"
+    p.innerText = num
+
+    return p
+}
+
+function messageObject(object, recursive) {
+
+    let container = document.createElement("div")
+    container.className = "message-object"
+
+    if (!recursive)
+        container.className += " console-message-container"
+
+    let keys = Object.keys(object)
+
+    if (Array.isArray(object))
+        container.innerText = " Array []"
+    else
+        container.innerText = " Object {}"
+
+    for (let i = 0; i < keys.length; i++) {
+        let div = document.createElement("div")
+
+        div.style.display = "flex"
+
+
+        let keyElement = document.createElement("div")
+        let valueElement = document.createElement("div")
+
+        keyElement.className = "message-object-key"
+        keyElement.innerText = " " + keys[i] + ":"
+
+        if (typeof object[keys[i]] !== "object")
+            div.style.alignItems = "center"
+
+        valueElement = formatMessage(object[keys[i]], true)
+
+        div.appendChild(keyElement)
+        div.appendChild(valueElement)
+
+        container.appendChild(div)
+    }
+
+    return container
+}
+
+function messageBool(bool) {
+    let p = document.createElement("p")
+
+    p.className = "message-bool"
+    p.innerText = bool
+
+    return p
+}
+
 function createConsoleMessage(value, location, type) {
     let consoleContainer = document.getElementById("console-container");
     let consoleScroll = document.getElementById("console-scroll")
 
     let message = document.createElement("div");
     let messageType = document.createElement("p");
-    let messageText = document.createElement("p");
+    let messageText = document.createElement("div");
     let messageTrace = document.createElement("p");
 
     message.className = "console-row "
     messageText.className = "console-text";
     messageTrace.className = "console-location";
 
-    messageText.innerText = value;
+    messageText.appendChild(formatMessage(value));
     messageTrace.innerText = location;
 
     if (type) {

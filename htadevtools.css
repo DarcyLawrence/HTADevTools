@@ -66,6 +66,10 @@
     font-family: 'Consolas';
     color: white;
     width: 100%;
+    border-color: rgb(136, 136, 136);
+    border-style: solid;
+    border-width: 0px;
+    border-bottom-width: 1px 
 }
 
 .console-row:first-child{
@@ -90,6 +94,7 @@
     flex-grow: 1;
     word-break: break-all;
     word-wrap: break-word;
+    padding-left: 16px;
 }
 
 .console-location{
@@ -137,4 +142,35 @@
     border-style: solid;
     border-width: 0px;
     border-bottom-width: 1px 
+}
+
+.console-message-container{
+    padding: 8px 0 8px 0;
+}
+
+.message-string{
+    color: #f1a604
+}
+
+.message-number{
+    color: #4fe05b
+}
+
+.message-bool{
+    color: #4fe05b
+}
+
+.message-object{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.message-object-key{
+    color: #5ab2fa;
+    padding-left: 8px;
+}
+
+.message-object-val{
+     color: #5ab2fa
 }
